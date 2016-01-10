@@ -30,8 +30,7 @@ public class PopularSuperheroes {
                 "D:\\spark\\spark-1.6.0-bin-hadoop2.6", new String[]{"target/spark-coursework-1.0.jar"});
 
         String superheroGraph = "src/main/resources/Marvel-Graph.txt";
-        String superheroNamesFile = "src/main/resources/Marvel-Names.txt";
-        Map<Integer, String> superheroNames = buildSuperheroNames(superheroNamesFile);
+        Map<Integer, String> superheroNames = buildSuperheroNames();
         Broadcast<Map<Integer, String>> superheroNamesVar = sc.broadcast(superheroNames);
 
         JavaPairRDD<Integer, Integer> heroIdToCount = sc.textFile(superheroGraph)
@@ -53,7 +52,8 @@ public class PopularSuperheroes {
         System.out.println(String.format("%s count: %s", superheroNamesVar.getValue().get(winner._2()), winner._1()));
     }
 
-    private static Map<Integer, String> buildSuperheroNames(String fileName) {
+    public static Map<Integer, String> buildSuperheroNames() {
+        String fileName = "src/main/resources/Marvel-Names.txt";
         final Pattern CAPTURE_BETWEEN_QUOTES = Pattern.compile("\"(.+?)\"");
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName), StandardCharsets.ISO_8859_1)) {
