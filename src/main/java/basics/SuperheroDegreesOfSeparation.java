@@ -43,14 +43,14 @@ public class SuperheroDegreesOfSeparation {
         JavaPairRDD<Integer, Tuple3<List<Integer>, Integer, NodeVisited>> graphRDD =
                 inputFile.mapToPair(SuperheroDegreesOfSeparation::convertToBFSNode);
 
-        for(int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             System.out.println("Running BFS iteration #: " + i);
 
             JavaPairRDD<Integer, Tuple3<List<Integer>, Integer, NodeVisited>> mapped =
                     graphRDD.flatMapToPair(SuperheroDegreesOfSeparation::visitNode);
             long count = mapped.count();
             System.out.println("Processed: " + count + " nodes");
-            if(hitCounter.value() > 0) {
+            if (hitCounter.value() > 0) {
                 System.out.println("Hit the target hero! From " + hitCounter.value() + " different directions");
                 break;
             }
@@ -114,11 +114,8 @@ public class SuperheroDegreesOfSeparation {
         NodeVisited status = UNPROCESSED;
         List<Integer> edges = new ArrayList<>();
 
-        // see if one is the original node with its connections, if so preserve them
-        if (edges1.size() > 0)
-            edges.addAll(edges1);
-        else if (edges2.size() > 0)
-            edges.addAll(edges2);
+        edges.addAll(edges1);
+        edges.addAll(edges2);
 
         // pick the minimum distance
         distance = distance1 < distance2 ? distance1 : distance2;
